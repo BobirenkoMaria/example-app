@@ -1,7 +1,8 @@
 @extends('layouts.app')
 
 @section('content')
-<section class="vh-100" style="background-color: #eee;">
+
+{{-- <section class="vh-100" style="background-color: #eee;">
     <div class="container h-100">
       <div class="row d-flex justify-content-center align-items-center h-100">
         <div class="col-lg-12 col-xl-11">
@@ -109,5 +110,5 @@
         </div>
       </div>
     </div>
-  </section>
+  </section> --}}
 @endsection

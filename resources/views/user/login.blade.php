@@ -2,7 +2,9 @@
 
 @section('content')
 
-<div id="wrapper" style="margin: 30px 40%">
+<auth></auth>
+
+{{-- <div id="wrapper" style="margin: 30px 40%">
     <h1>Sign In Form</h1>
     <form method="POST" action="{{ route('login') }}">
       @csrf
@@ -66,5 +68,5 @@
           </button>
         </div>
       </form>
-</div>
+</div> --}}
 @endsection
