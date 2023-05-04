@@ -1,30 +1,38 @@
 <?php
 
-use App\Http\Controllers\AutorizationController;
-use App\Http\Controllers\ChatController;
-use App\Http\Controllers\EmailController;
-use App\Http\Middleware\AuthCheck;
-use App\Http\Middleware\ToLogin;
+use App\Http\Controllers\ProfileController;
+use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
 
-Route::get('/', function(){
-    return to_route('login');
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register web routes for your application. These
+| routes are loaded by the RouteServiceProvider within a group which
+| contains the "web" middleware group. Now create something great!
+|
+*/
+
+Route::get('/', function () {
+    return Inertia::render('Welcome', [
+        'canLogin' => Route::has('login'),
+        'canRegister' => Route::has('register'),
+        'laravelVersion' => Application::VERSION,
+        'phpVersion' => PHP_VERSION,
+    ]);
 });
 
-Route::get('/login', [AutorizationController::class, 'showLoginForm'])->name('login');
+Route::get('/dashboard', function () {
+    return Inertia::render('Dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
 
-// Route::get('/register', [AutorizationController::class, 'showRegisterForm'])->name('register');
-Route::post('/register', [AutorizationController::class, 'registerUser'])->name('register');
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
 
-// Route::get('/verifity-email', [EmailController::class, 'verifityEmail'])->name('verifity');
-
-Route::get('/password-recovery', [AutorizationController::class, 'passwordRecoveryForm'])->name('password_recovery');
-Route::post('/password-recovery', [AutorizationController::class, 'passwordRecovery'])->name('password_recovery');
-
-// Route::get('/logout', [AutorizationController::class, 'logOut'])->name('logout');
-
-
-// Route::middleware(AuthCheck::class)->get('/messager', [ChatController::class, 'getChat'])->name('messager');
-
-// Route::middleware(AuthCheck::class)->post('/add-private-chat', [ChatController::class, 'addChat'])->name('add_private_chat');
-// Route::middleware(AuthCheck::class)->post('/delete-private-chat', [ChatController::class, 'addChat'])->name('delete_private_chat');
+require __DIR__.'/auth.php';
